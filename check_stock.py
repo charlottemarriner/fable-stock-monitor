@@ -1,14 +1,26 @@
+import os
 import requests
-from bs4 import BeautifulSoup
 
 URL = "https://eu.shop.xboxgamestudios.com/products/fable-collectors-edition"
 
-html = requests.get(URL, headers={
+headers = {
     "User-Agent": "Mozilla/5.0"
-}).text
+}
 
-if "Out of stock" not in html:
-    print("IN STOCK")
-    exit(1)      # Trigger notification
+page = requests.get(URL, headers=headers).text
+
+if "Out of stock" not in page:
+    webhook = os.environ["DISCORD_WEBHOOK"]
+
+    requests.post(
+        webhook,
+        json={
+            "content":
+            "🚨 Fable Collector's Edition appears to be IN STOCK!\nhttps://eu.shop.xboxgamestudios.com/products/fable-collectors-edition"
+        }
+    )
+
+    print("Notification sent!")
+
 else:
-    print("Still out of stock")
+    print("Still out of stock.")
