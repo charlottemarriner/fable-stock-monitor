@@ -9,7 +9,7 @@ headers = {
 
 page = requests.get(URL, headers=headers).text
 
-if "Out of stock" not in page:
+if True:
     webhook = os.environ["DISCORD_WEBHOOK"]
 
     requests.post(
